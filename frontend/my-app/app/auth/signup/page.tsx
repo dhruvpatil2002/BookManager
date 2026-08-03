@@ -44,18 +44,34 @@ export default function SignupPage() {
   });
 
   const onSubmit = async (data: SignupForm) => {
-    try {
-      const { token, user } = await signup(data);
-      setUser(user);
-      router.push("/");
-      router.refresh(); // ensures navbar updates
-    } catch (err: any) {
-      form.setError("root", {
-        message: err.response?.data?.message || "Signup failed",
-      });
-    }
-  };
+  try {
+    const response = await signup(data);
 
+    console.log("Signup Response:", response);
+
+    if (!response?.token || !response?.user) {
+      throw new Error("Invalid signup response from server");
+    }
+
+    // Save JWT
+    localStorage.setItem("token", response.token);
+
+    // Save user
+    setUser(response.user);
+
+    router.replace("/");
+    router.refresh();
+  } catch (err: any) {
+    console.error(err);
+
+    form.setError("root", {
+      message:
+        err.response?.data?.message ||
+        err.message ||
+        "Signup failed",
+    });
+  }
+};
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <Card className="w-full max-w-lg border-2 shadow-lg">

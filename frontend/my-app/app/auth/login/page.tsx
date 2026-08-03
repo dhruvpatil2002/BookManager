@@ -46,6 +46,10 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginForm) => {
   try {
     const response = await login(data);
+     console.log("Login Response:", response);
+       if (!response?.token || !response?.user) {
+      throw new Error("Invalid login response from server");
+    }
 
     localStorage.setItem("token", response.token);
 
@@ -53,6 +57,7 @@ export default function LoginPage() {
     setUser(response.user);
 
     router.push("/");
+     router.refresh();
   } catch (err: any) {
     form.setError("root", {
       message: err.response?.data?.message || "Login failed",
