@@ -12,7 +12,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://book-manager-o23y3crh6-dhruvpatil2002s-projects.vercel.app",
+  process.env.CLIENT_URL
 ];
 
 
