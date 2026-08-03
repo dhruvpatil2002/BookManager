@@ -23,14 +23,17 @@ export const registerUser = async (req, res) => {
       authProvider: "local",
     });
 
-    generateToken(res, user._id);
+   const token = generateToken(res, user._id);
 
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      authProvider: user.authProvider,
-    });
+res.status(201).json({
+  token,          // <-- add this
+  user: {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    authProvider: user.authProvider,
+  },
+});
 
   } catch (error) {
     res.status(500).json({
@@ -60,14 +63,17 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    generateToken(res, user._id);
+    const token = generateToken(res, user._id);
 
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      authProvider: user.authProvider,
-    });
+res.json({
+  token,          // <-- add this
+  user: {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    authProvider: user.authProvider,
+  },
+});
 
   } catch (error) {
     res.status(500).json({

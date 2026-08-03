@@ -43,27 +43,29 @@ export default function LoginPage() {
     defaultValues: { email: "", password: "" },
   });
 
-  const onSubmit = async (data: LoginForm) => {
-  try {
-    const response = await login(data);
-     console.log("Login Response:", response);
-       if (!response?.token || !response?.user) {
-      throw new Error("Invalid login response from server");
-    }
+  const onSubmit = async(data:LoginForm)=>{
 
-    localStorage.setItem("token", response.token);
+try{
 
+const user = await login(data);
 
-    setUser(response.user);
+setUser(user);
 
-    router.push("/");
-     router.refresh();
-  } catch (err: any) {
-    form.setError("root", {
-      message: err.response?.data?.message || "Login failed",
-    });
-  }
+router.push("/dashboard");
+
+router.refresh();
+
+}
+catch(err:any){
+
+form.setError("root",{
+message:err.response?.data?.message || "Login failed"
+});
+
+}
+
 };
+
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
   <Card className="w-full max-w-lg border-2 border-gray-200 shadow-lg">

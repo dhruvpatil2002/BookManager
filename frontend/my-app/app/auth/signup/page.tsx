@@ -45,21 +45,14 @@ export default function SignupPage() {
 
   const onSubmit = async (data: SignupForm) => {
   try {
-    const response = await signup(data);
+    const user = await signup(data);
 
-    console.log("Signup Response:", response);
+setUser(user);
+    
 
-    if (!response?.token || !response?.user) {
-      throw new Error("Invalid signup response from server");
-    }
 
-    // Save JWT
-    localStorage.setItem("token", response.token);
 
-    // Save user
-    setUser(response.user);
-
-    router.replace("/");
+router.push("/dashboard");
     router.refresh();
   } catch (err: any) {
     console.error(err);
