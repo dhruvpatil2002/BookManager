@@ -44,19 +44,21 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginForm) => {
-    try {
-    const user = await login(data);
+  try {
+    const response = await login(data);
 
-setUser(user);
+    localStorage.setItem("token", response.token);
 
-router.push("/");
-    } catch (err: any) {
-      form.setError("root", {
-        message: err.response?.data?.message || "Login failed",
-      });
-    }
-  };
 
+    setUser(response.user);
+
+    router.push("/");
+  } catch (err: any) {
+    form.setError("root", {
+      message: err.response?.data?.message || "Login failed",
+    });
+  }
+};
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
   <Card className="w-full max-w-lg border-2 border-gray-200 shadow-lg">
